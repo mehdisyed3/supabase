@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { supabase } from "@app/utils/supabaseClient";
 
 import PromptCard from "./PromptCard";
 
@@ -26,15 +27,38 @@ const Feed = () => {
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
-  const fetchPosts = async () => {
-    const response = await fetch("/api/prompt");
-    const data = await response.json();
+  // const fetchPosts = async () => {
+  //   const response = await fetch("/api/prompt");
+  //   const data = await response.json();
 
-    setAllPosts(data);
-  };
+  //   setAllPosts(data);
+  // };
+
+  async function getAllPrompts() {
+    const { data: {user} } = await supabase.auth.getUser()
+
+    console.log('>>> FEED user',user.id)
+    try {
+      const { data, error } = await supabase
+        .from('prompts')
+        .select('*')
+        // .eq('user_id', user?.id)
+
+
+        
+  
+      if (error) {
+        console.error('Error fetching prompts:', error.message);
+      } else {
+        console.log('All prompts:', data);
+      }
+    } catch (e) {
+      console.error('Error:', e.message);
+    }
+  }
 
   useEffect(() => {
-    fetchPosts();
+    getAllPrompts();
   }, []);
 
   const filterPrompts = (searchtext) => {

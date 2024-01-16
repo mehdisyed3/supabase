@@ -4,12 +4,26 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@app/utils/supabaseClient";
+
 
 const Nav = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const router = useRouter();
 
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
+  const [session, setSession]=useState(null)
+
+  useEffect(() => {
+    (async () => {
+      const { data:  user  } = await supabase.auth.getUser();
+      setSession(user)
+    })();
+  }, []);
+
+  
 
   useEffect(() => {
     (async () => {
@@ -17,6 +31,25 @@ const Nav = () => {
       setProviders(res);
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getProviders();
+      setProviders(res);
+    })();
+  }, []);
+
+  const handleSignOut = async() => {
+    try {
+
+      fetch(`/auth/sign-out`, {
+        method: "POST",
+      });
+      
+    } catch (error) {
+      console.log('>>> err',error)
+    }
+  }
 
   return (
     <nav className='flex-between w-full mb-16 pt-3'>
@@ -39,7 +72,7 @@ const Nav = () => {
               Create Post
             </Link>
 
-            <button type='button' onClick={signOut} className='outline_btn'>
+            <button type='button' onClick={handleSignOut} className='outline_btn'>
               Sign Out
             </button>
 
@@ -61,7 +94,8 @@ const Nav = () => {
                   type='button'
                   key={provider.name}
                   onClick={() => {
-                    signIn(provider.id);
+                    // signIn(provider.id);
+                    router.push('/sign-in')
                   }}
                   className='black_btn'
                 >
@@ -122,7 +156,8 @@ const Nav = () => {
                   type='button'
                   key={provider.name}
                   onClick={() => {
-                    signIn(provider.id);
+                    // signIn(provider.id);
+                    router.push('/sign-in')
                   }}
                   className='black_btn'
                 >
