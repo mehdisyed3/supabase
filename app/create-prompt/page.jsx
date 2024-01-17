@@ -29,6 +29,7 @@ const CreatePrompt = () => {
             user_id: user?.id,
             prompt: post.prompt,
             tag: post.tag,
+            email: user?.email
           },
         ]);
   

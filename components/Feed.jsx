@@ -35,28 +35,27 @@ const Feed = () => {
   // };
 
   async function getAllPrompts() {
-    const { data: {user} } = await supabase.auth.getUser()
-
-    console.log('>>> FEED user',user.id)
+    const { data: { user } } = await supabase.auth.getUser();
+  
+    console.log('>>> FEED user', user.id);
+  
     try {
       const { data, error } = await supabase
         .from('prompts')
         .select('*')
-        // .eq('user_id', user?.id)
-
-
-        
+        // .eq('user_id', user?.id);
   
       if (error) {
         console.error('Error fetching prompts:', error.message);
       } else {
         console.log('All prompts:', data);
+        setAllPosts(data)
       }
     } catch (e) {
       console.error('Error:', e.message);
     }
   }
-
+  
   useEffect(() => {
     getAllPrompts();
   }, []);
@@ -65,7 +64,7 @@ const Feed = () => {
     const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
     return allPosts.filter(
       (item) =>
-        regex.test(item.creator.username) ||
+        regex.test(item.email) ||
         regex.test(item.tag) ||
         regex.test(item.prompt)
     );
