@@ -15,7 +15,7 @@ const Nav = () => {
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [session, setSession]=useState(null)
-
+  console.log('>>> SEsION NAV BAR',session)
   useEffect(() => {
     (async () => {
       const { data:  user  } = await supabase.auth.getUser();
@@ -23,21 +23,14 @@ const Nav = () => {
     })();
   }, []);
 
-  
+  console.log('>>> PROVIDERs', providers)
 
-  useEffect(() => {
-    (async () => {
-      const res = await getProviders();
-      setProviders(res);
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const res = await getProviders();
-      setProviders(res);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await getProviders();
+  //     setProviders(res);
+  //   })();
+  // }, []);
 
   const handleSignOut = async() => {
     try {
@@ -88,11 +81,11 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {providers &&
-              Object.values(providers).map((provider) => (
+            {session &&
+              // Object.values(providers).map((provider) => (
                 <button
                   type='button'
-                  key={provider.name}
+                  // key={provider.name}
                   onClick={() => {
                     // signIn(provider.id);
                     router.push('/sign-in')
@@ -101,7 +94,8 @@ const Nav = () => {
                 >
                   Sign in
                 </button>
-              ))}
+              // ))
+              }
           </>
         )}
       </div>
@@ -150,11 +144,11 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {providers &&
-              Object.values(providers).map((provider) => (
+            {session &&
+              // Object.values(providers).map((provider) => (
                 <button
                   type='button'
-                  key={provider.name}
+                  // key={provider.name}
                   onClick={() => {
                     // signIn(provider.id);
                     router.push('/sign-in')
@@ -163,7 +157,8 @@ const Nav = () => {
                 >
                   Sign in
                 </button>
-              ))}
+              // ))
+              }
           </>
         )}
       </div>
