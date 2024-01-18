@@ -64,11 +64,11 @@ const Nav = () => {
             <Link href='/create-prompt' className='black_btn'>
               Create Post
             </Link>
-
+            <form action='/auth/signout' method='post'>
             <button type='button' onClick={handleSignOut} className='outline_btn'>
               Sign Out
             </button>
-
+            </form>
             <Link href='/profile'>
               <Image
                 src='/assets/images/aurora-reflections--tv.jpg'
