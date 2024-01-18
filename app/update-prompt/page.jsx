@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@components/Form";
+import { supabase } from "@app/utils/supabaseClient";
 
 const UpdatePrompt = () => {
   const router = useRouter();
@@ -17,23 +18,25 @@ const UpdatePrompt = () => {
 
   useEffect(() => {
     const getPromptDetails = async () => {
-      const response = await fetch(`/api/prompt/${promptId}`,);
-      const data = await response.json();
 
-      console.log('>>>>  response promtp data', response)
+      const { data, error } = await supabase
+          .from('prompts')
+          .select('*')
+          .eq('id', promptId)
+          
 
       setPost({
-        prompt: data.prompt,
-        tag: data.tag,
+        prompt: data[0].prompt,
+        tag: data[0].tag,
       });
     };
 
     if (promptId){
-      console.log('>>> promptID EXIST',promptId)
+
        getPromptDetails()};
   }, [promptId]);
 
-  console.log('>>>> post', post)
+
 
   const updatePrompt = async (e) => {
     e.preventDefault();

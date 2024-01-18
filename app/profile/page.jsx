@@ -3,28 +3,61 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@app/utils/supabaseClient";
 
 import Profile from "@components/Profile";
 
 const MyProfile = () => {
   const router = useRouter();
-  const { data: session } = useSession();
 
   const [myPosts, setMyPosts] = useState([]);
+  const [userInfo, setUserInfo]= useState([])
 
+  useEffect(()=>{
+    const user = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    user && setUserInfo(user)
+    }
+
+    user()
+  },[])
+
+  console.log('>>> userINFO', userInfo)
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/posts`);
-      const data = await response.json();
+      console.log('>>> fetch post')
+      if (userInfo.id) {
+  
+        try {
+          const { data, error } = await supabase
+            .from('prompts')
+            .select('*')
+          .eq('user_id', userInfo?.id);
 
-      setMyPosts(data);
+          console.log('>>> datass', data)
+  
+          if (error) {
+            console.error('Error fetching prompts:', error.message);
+          } else {
+            setMyPosts(data)
+           
+          }
+        } catch (e) {
+          console.error('Error:', e.message);
+        }
+      }
+
     };
 
-    if (session?.user.id) fetchPosts();
-  }, [session?.user.id]);
+    fetchPosts();
+  }, [userInfo]);
 
-  const handleEdit = (post) => {
-    router.push(`/update-prompt?id=${post._id}`);
+
+
+  const handleEdit =  (post) => {
+
+    router.push(`/update-prompt?id=${post.id}`);
   };
 
   const handleDelete = async (post) => {
@@ -48,6 +81,7 @@ const MyProfile = () => {
   };
 // changes needed on this file... to fetch seession and provide data to the Profile component
 // need to see whyt sig in button doesn;t change withoout refresh
+console.log('>>> MY PIST',myPosts)
   return (
     <Profile
       name='My'
