@@ -11,37 +11,37 @@ const MyProfile = () => {
   const router = useRouter();
 
   const [myPosts, setMyPosts] = useState([]);
-  const [userInfo, setUserInfo]= useState([])
+  const [userInfo, setUserInfo] = useState([])
 
-  useEffect(()=>{
+  useEffect(() => {
     const user = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
 
-    user && setUserInfo(user)
+      user && setUserInfo(user)
     }
 
     user()
-  },[])
+  }, [])
 
   console.log('>>> userINFO', userInfo)
   useEffect(() => {
     const fetchPosts = async () => {
       console.log('>>> fetch post')
       if (userInfo.id) {
-  
+
         try {
           const { data, error } = await supabase
             .from('prompts')
             .select('*')
-          .eq('user_id', userInfo?.id);
+            .eq('user_id', userInfo?.id);
 
           console.log('>>> datass', data)
-  
+
           if (error) {
             console.error('Error fetching prompts:', error.message);
           } else {
             setMyPosts(data)
-           
+
           }
         } catch (e) {
           console.error('Error:', e.message);
@@ -55,7 +55,7 @@ const MyProfile = () => {
 
 
 
-  const handleEdit =  (post) => {
+  const handleEdit = (post) => {
 
     router.push(`/update-prompt?id=${post.id}`);
   };
@@ -68,9 +68,9 @@ const MyProfile = () => {
     if (hasConfirmed) {
       try {
         const { data, error } = await supabase
-        .from('prompts')
-        .delete()
-        .eq('id', post.id);
+          .from('prompts')
+          .delete()
+          .eq('id', post.id);
         const filteredPosts = myPosts.filter((item) => item._id !== post.id);
 
         setMyPosts(filteredPosts);
@@ -79,7 +79,7 @@ const MyProfile = () => {
       }
     }
   };
-  
+
   return (
     <Profile
       name='My'

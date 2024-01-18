@@ -24,7 +24,6 @@ const MyProfile = () => {
   }, [session?.user.id]);
 
   const handleEdit = (post) => {
-    console.log('>>> handle EDIT', post)
     router.push(`/update-prompt?id=${post.id}`);
   };
 

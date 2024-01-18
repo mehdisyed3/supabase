@@ -19,10 +19,10 @@ const UpdatePrompt = () => {
     const getPromptDetails = async () => {
 
       const { data, error } = await supabase
-          .from('prompts')
-          .select('*')
-          .eq('id', promptId)
-          
+        .from('prompts')
+        .select('*')
+        .eq('id', promptId)
+
 
       setPost({
         prompt: data[0].prompt,
@@ -30,12 +30,13 @@ const UpdatePrompt = () => {
       });
     };
 
-    if (promptId){
+    if (promptId) {
 
-       getPromptDetails()};
+      getPromptDetails()
+    };
   }, [promptId]);
 
-console.log('>>> post UPDATE', post)
+  console.log('>>> post UPDATE', post)
 
   const updatePrompt = async (e) => {
     e.preventDefault();
@@ -45,18 +46,18 @@ console.log('>>> post UPDATE', post)
 
     try {
 
-        const { data, error } = await supabase
-          .from('prompts')
-          .update({ prompt: post.prompt, tag: post.tag })
-          .eq('id', promptId);
+      const { data, error } = await supabase
+        .from('prompts')
+        .update({ prompt: post.prompt, tag: post.tag })
+        .eq('id', promptId);
 
-          router.push('/profile')
-      
-        if (error) {
-          throw new Error(error.message);
-        }
-      
-        return data;
+      router.push('/profile')
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return data;
 
       // const response = await fetch(`/api/prompt/${promptId}`, {
       //   method: "PATCH",

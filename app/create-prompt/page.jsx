@@ -18,9 +18,9 @@ const CreatePrompt = () => {
 
   const createPrompt = async (e) => {
     e.preventDefault();
-    const { data: {user} } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
     setIsSubmitting(true);
-    console.log('>>>> supabse', user)
+
     try {
       const { data, error } = await supabase
         .from('prompts')
@@ -32,24 +32,24 @@ const CreatePrompt = () => {
             email: user?.email
           },
         ]);
-  
+
       if (error) {
         throw error;
       }
       setPost({ prompt: "", tag: "" })
-  
+
       console.log('>>>> Inserted data:', data);
-      
+
       // If you want to redirect after successful insertion
       // router.push("/");
-  
+
     } catch (error) {
       console.error('Error creating prompt:', error);
     }
     finally {
-        setIsSubmitting(false);
-      }
-   
+      setIsSubmitting(false);
+    }
+
   };
 
   return (

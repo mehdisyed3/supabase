@@ -24,7 +24,6 @@ const AuthForm = () => {
     if (!error) {
       setIsSigningUp(true)
     }
-    console.log('>>>> Data', data, ">>>> Error", error)
   }
 
   const handleLogIn = async (e) => {
@@ -36,7 +35,6 @@ const AuthForm = () => {
     console.log({ error, data })
 
     if (!error) {
-      console.log('>>>> ROUTER', router)
       router.push('/')
     }
   }
