@@ -32,7 +32,7 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
           onClick={handleProfileClick}
         >
           <Image
-            src={''}
+            src={'/assets/images/aurora-reflections--tv.jpg'}
             alt='user_image'
             width={40}
             height={40}
