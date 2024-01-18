@@ -67,11 +67,11 @@ const MyProfile = () => {
 
     if (hasConfirmed) {
       try {
-        await fetch(`/api/prompt/${post._id.toString()}`, {
-          method: "DELETE",
-        });
-
-        const filteredPosts = myPosts.filter((item) => item._id !== post._id);
+        const { data, error } = await supabase
+        .from('prompts')
+        .delete()
+        .eq('id', post.id);
+        const filteredPosts = myPosts.filter((item) => item._id !== post.id);
 
         setMyPosts(filteredPosts);
       } catch (error) {
@@ -79,9 +79,7 @@ const MyProfile = () => {
       }
     }
   };
-// changes needed on this file... to fetch seession and provide data to the Profile component
-// need to see whyt sig in button doesn;t change withoout refresh
-console.log('>>> MY PIST',myPosts)
+  
   return (
     <Profile
       name='My'
