@@ -9,9 +9,8 @@ import { supabase } from "@app/utils/supabaseClient";
 const UpdatePrompt = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  // console.log('>>>> searchParams',searchParams)
   const promptId = searchParams.get("id");
-  // console.log('>>>> prmptId on updatePromt',promptId)
+
 
   const [post, setPost] = useState({ prompt: "", tag: "", });
   const [submitting, setIsSubmitting] = useState(false);
@@ -36,7 +35,7 @@ const UpdatePrompt = () => {
        getPromptDetails()};
   }, [promptId]);
 
-
+console.log('>>> post UPDATE', post)
 
   const updatePrompt = async (e) => {
     e.preventDefault();
@@ -45,17 +44,31 @@ const UpdatePrompt = () => {
     if (!promptId) return alert("Missing PromptId!");
 
     try {
-      const response = await fetch(`/api/prompt/${promptId}`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          prompt: post.prompt,
-          tag: post.tag,
-        }),
-      });
 
-      if (response.ok) {
-        router.push("/");
-      }
+        const { data, error } = await supabase
+          .from('prompts')
+          .update({ prompt: post.prompt, tag: post.tag })
+          .eq('id', promptId);
+
+          router.push('/profile')
+      
+        if (error) {
+          throw new Error(error.message);
+        }
+      
+        return data;
+
+      // const response = await fetch(`/api/prompt/${promptId}`, {
+      //   method: "PATCH",
+      //   body: JSON.stringify({
+      //     prompt: post.prompt,
+      //     tag: post.tag,
+      //   }),
+      // });
+
+      // if (response.ok) {
+      //   router.push("/");
+      // }
     } catch (error) {
       console.log(error);
     } finally {
