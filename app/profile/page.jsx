@@ -46,7 +46,8 @@ const MyProfile = () => {
       }
     }
   };
-
+// changes needed on this file... to fetch seession and provide data to the Profile component
+// need to see whyt sig in button doesn;t change withoout refresh
   return (
     <Profile
       name='My'

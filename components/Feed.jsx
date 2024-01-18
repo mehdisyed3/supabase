@@ -8,7 +8,7 @@ import PromptCard from "./PromptCard";
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
     <div className='mt-16 prompt_layout'>
-      {data.map((post) => 
+      {data.map((post) =>
         <PromptCard
           key={post.id}
           post={post}
@@ -27,35 +27,30 @@ const Feed = () => {
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
-  // const fetchPosts = async () => {
-  //   const response = await fetch("/api/prompt");
-  //   const data = await response.json();
-
-  //   setAllPosts(data);
-  // };
 
   async function getAllPrompts() {
     const { data: { user } } = await supabase.auth.getUser();
-  
-    console.log('>>> FEED user', user.id);
-  
-    try {
-      const { data, error } = await supabase
-        .from('prompts')
-        .select('*')
+
+    if (user) {
+
+
+      try {
+        const { data, error } = await supabase
+          .from('prompts')
+          .select('*')
         // .eq('user_id', user?.id);
-  
-      if (error) {
-        console.error('Error fetching prompts:', error.message);
-      } else {
-        console.log('All prompts:', data);
-        setAllPosts(data)
+
+        if (error) {
+          console.error('Error fetching prompts:', error.message);
+        } else {
+          setAllPosts(data)
+        }
+      } catch (e) {
+        console.error('Error:', e.message);
       }
-    } catch (e) {
-      console.error('Error:', e.message);
     }
   }
-  
+
   useEffect(() => {
     getAllPrompts();
   }, []);

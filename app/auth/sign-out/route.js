@@ -30,8 +30,8 @@ export const POST =  async (req)=> {
   if(session){
     await supabase.auth.signOut()
   }
- 
-  return NextResponse.redirect(new URL('/',req.url),{
+  console.log('>>> SIGNOUT REQUEST URL', req.url)
+  return NextResponse.redirect(new URL('/profile',req.url),{
     status:302
   })
 }

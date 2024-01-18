@@ -9,28 +9,20 @@ import { supabase } from "@app/utils/supabaseClient";
 
 
 const Nav = () => {
-  // const { data: session } = useSession();
   const router = useRouter();
 
-  const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [session, setSession]=useState(null)
-  console.log('>>> SEsION NAV BAR',session)
+
   useEffect(() => {
     (async () => {
       const { data:  user  } = await supabase.auth.getUser();
+      // const { data:  session  } = await supabase.auth.getSession();
       setSession(user)
     })();
   }, []);
 
-  console.log('>>> PROVIDERs', providers)
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await getProviders();
-  //     setProviders(res);
-  //   })();
-  // }, []);
+  console.log('>>> router', router)
 
   const handleSignOut = async() => {
     try {
@@ -38,6 +30,8 @@ const Nav = () => {
       fetch(`/auth/sign-out`, {
         method: "POST",
       });
+      console.log('>>>> signout function')
+      router.push('/sign-in')
       
     } catch (error) {
       console.log('>>> err',error)
@@ -64,11 +58,11 @@ const Nav = () => {
             <Link href='/create-prompt' className='black_btn'>
               Create Post
             </Link>
-            <form action='/auth/signout' method='post'>
-            <button type='button' onClick={handleSignOut} className='outline_btn'>
+            {/* <form action='/auth/signout' method='post'> */}
+            <button type='button' onClick={()=>handleSignOut()} className='black_btn '>
               Sign Out
             </button>
-            </form>
+            {/* </form> */}
             <Link href='/profile'>
               <Image
                 src='/assets/images/aurora-reflections--tv.jpg'
@@ -81,20 +75,19 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {session &&
-              // Object.values(providers).map((provider) => (
+            {session && session?.user &&
+              Object?.values(session?.user).map((user) => (
                 <button
                   type='button'
-                  // key={provider.name}
+                  key={user}
                   onClick={() => {
-                    // signIn(provider.id);
                     router.push('/sign-in')
                   }}
                   className='black_btn'
                 >
                   Sign in
                 </button>
-              // ))
+              ))
               }
           </>
         )}
@@ -132,8 +125,7 @@ const Nav = () => {
                 <button
                   type='button'
                   onClick={() => {
-                    setToggleDropdown(false);
-                    signOut();
+                    handleSignOut()
                   }}
                   className='mt-5 w-full black_btn'
                 >
@@ -144,20 +136,19 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {session &&
-              // Object.values(providers).map((provider) => (
+            {session && session?.user &&
+              Object.values(session.user).map((user) => (
                 <button
+                key={user}
                   type='button'
-                  // key={provider.name}
                   onClick={() => {
-                    // signIn(provider.id);
                     router.push('/sign-in')
                   }}
                   className='black_btn'
                 >
                   Sign in
                 </button>
-              // ))
+              ))
               }
           </>
         )}
