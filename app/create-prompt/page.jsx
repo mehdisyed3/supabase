@@ -40,9 +40,6 @@ const CreatePrompt = () => {
 
       console.log('>>>> Inserted data:', data);
 
-      // If you want to redirect after successful insertion
-      // router.push("/");
-
     } catch (error) {
       console.error('Error creating prompt:', error);
     }
